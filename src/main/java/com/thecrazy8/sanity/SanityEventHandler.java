@@ -98,12 +98,13 @@ public class SanityEventHandler {
         // wakeImmediately() being false means they completed a full sleep cycle
         if (!event.wakeImmediately() && !event.updateLevel()) {
             SanityData sanityData = serverPlayer.getData(SanityAttachments.SANITY_DATA);
-            if (sanityData != null) {
-                // Restore sanity after sleeping
-                sanityData.addSanity(SANITY_RECOVERY_SLEEP);
-                sanityData.setLastUpdate(System.currentTimeMillis());
-                serverPlayer.setData(SanityAttachments.SANITY_DATA, sanityData);
+            if (sanityData == null) {
+                sanityData = new SanityData();
             }
+            // Restore sanity after sleeping
+            sanityData.addSanity(SANITY_RECOVERY_SLEEP);
+            sanityData.setLastUpdate(System.currentTimeMillis());
+            serverPlayer.setData(SanityAttachments.SANITY_DATA, sanityData);
         }
     }
 

@@ -21,6 +21,10 @@ This Minecraft 1.21.1 mod for NeoForge has been **fully implemented** with all r
 #### Hunger Impact
 - Low hunger (≤ 6 food): **-0.15 sanity/second**
 
+#### Sleep Recovery
+- Sleeping in a bed: **+50 sanity**
+- Only applies when completing a full sleep cycle (not interrupted)
+
 #### Thirst Integration (ThirstWasTaken)
 - ✅ Integration hooks implemented
 - Automatically detects if mod is present

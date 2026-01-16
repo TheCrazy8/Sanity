@@ -20,6 +20,10 @@ public class SanityVisualEffects implements LayeredDraw.Layer {
     private int flashTimer = 0;
     private int hallucinationTimer = 0;
     private int tickCounter = 0; // Limit random updates to every few frames
+    
+    // Cached distortion positions (updated once per second)
+    private int[] distortionYPositions = new int[5];
+    private int[] distortionHeights = new int[5];
 
     @Override
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
@@ -90,12 +94,16 @@ public class SanityVisualEffects implements LayeredDraw.Layer {
 
         // Update timers only every 20 ticks (once per second) to reduce random calls
         if (tickCounter % 20 != 0) {
-            if (flashTimer > 0) flashTimer--;
-            if (hallucinationTimer > 0) hallucinationTimer--;
             return;
         }
 
-        // Timer updates
+        // Update cached distortion positions
+        for (int i = 0; i < 5; i++) {
+            distortionYPositions[i] = random.nextInt(100);
+            distortionHeights[i] = 1 + random.nextInt(3);
+        }
+
+        // Timer updates (decrement and possibly start new timer)
         if (flashTimer > 0) {
             flashTimer--;
         } else if (sanity < 30.0f && random.nextFloat() < 0.2f) {
@@ -129,12 +137,12 @@ public class SanityVisualEffects implements LayeredDraw.Layer {
     }
 
     private void renderScreenDistortion(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
-        // Create wavy lines across the screen
+        // Create wavy lines across the screen using cached positions
         int alpha = (int) (100 * distortionAmount);
         
         for (int i = 0; i < 5; i++) {
-            int y = (int) (screenHeight * random.nextFloat());
-            int height = 1 + random.nextInt(3);
+            int y = (screenHeight * distortionYPositions[i]) / 100;
+            int height = distortionHeights[i];
             guiGraphics.fill(0, y, screenWidth, y + height, (alpha << 24) | 0x808080);
         }
     }

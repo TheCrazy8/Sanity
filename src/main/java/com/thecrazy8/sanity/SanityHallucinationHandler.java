@@ -84,7 +84,7 @@ public class SanityHallucinationHandler {
                         mob.setTarget(null);
                     }
                 }
-            } catch (IllegalArgumentException | NullPointerException e) {
+            } catch (IllegalArgumentException e) {
                 Sanity.LOGGER.warn("Failed to spawn hallucination entity at {}: {}", spawnPos, e.getMessage());
             }
         }

@@ -1,6 +1,7 @@
 package com.thecrazy8.sanity.client;
 
 import com.thecrazy8.sanity.Sanity;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -11,7 +12,7 @@ public class ClientModEvents {
     
     @SubscribeEvent
     public static void registerGuiLayers(RegisterGuiLayersEvent event) {
-        event.registerAboveAll(Sanity.MOD_ID + ":sanity_visual_effects", new SanityVisualEffects());
-        event.registerAboveAll(Sanity.MOD_ID + ":sanity_hud", new SanityHudOverlay());
+        event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Sanity.MOD_ID, "sanity_visual_effects"), new SanityVisualEffects());
+        event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Sanity.MOD_ID, "sanity_hud"), new SanityHudOverlay());
     }
 }

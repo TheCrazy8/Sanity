@@ -4,12 +4,12 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 public class HallucinationDamagePreventionHandler {
     
     @SubscribeEvent
-    public void onLivingAttack(LivingAttackEvent.Pre event) {
+    public void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
         DamageSource source = event.getSource();
         Entity attacker = source.getEntity();
         
@@ -32,13 +32,11 @@ public class HallucinationDamagePreventionHandler {
         // Extra safety: prevent hallucination entities from dealing damage at damage calculation stage
         if (attacker != null && attacker.getPersistentData().contains("sanity_hallucination")) {
             event.setNewDamage(0.0f);
-            event.setCanceled(true);
         }
         
         // Prevent damage to hallucination entities
         if (event.getEntity().getPersistentData().contains("sanity_hallucination")) {
             event.setNewDamage(0.0f);
-            event.setCanceled(true);
         }
     }
 }

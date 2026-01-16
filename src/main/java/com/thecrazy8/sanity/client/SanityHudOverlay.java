@@ -33,6 +33,7 @@ public class SanityHudOverlay implements LayeredDraw.Layer {
     }
 
     private void renderSanityBar(GuiGraphics guiGraphics, SanityData sanityData, int screenWidth, int screenHeight) {
+        Minecraft minecraft = Minecraft.getInstance();
         int barWidth = 81;
         int barHeight = 9;
         int x = screenWidth / 2 - barWidth / 2;

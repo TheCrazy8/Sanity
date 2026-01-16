@@ -73,7 +73,6 @@ public class SanityHallucinationHandler {
                     entity.getPersistentData().putInt("hallucination_lifetime", 100 + RANDOM.nextInt(100));
                     
                     // Make hallucinations completely harmless and non-interactive
-                    entity.setNoAi(true);
                     entity.setSilent(true);
                     entity.setInvulnerable(true);
                     entity.setNoGravity(true);
@@ -110,12 +109,12 @@ public class SanityHallucinationHandler {
         
         // Random unsettling sounds
         var sounds = new net.minecraft.sounds.SoundEvent[]{
-            SoundEvents.AMBIENT_CAVE,
-            SoundEvents.ENDERMAN_AMBIENT,
-            SoundEvents.GHAST_AMBIENT,
-            SoundEvents.WARDEN_AMBIENT,
-            SoundEvents.SCULK_SHRIEKER_SHRIEK,
-            SoundEvents.PORTAL_AMBIENT
+            SoundEvents.AMBIENT_CAVE.value(),
+            SoundEvents.ENDERMAN_AMBIENT.value(),
+            SoundEvents.GHAST_AMBIENT.value(),
+            SoundEvents.WARDEN_AMBIENT.value(),
+            SoundEvents.SCULK_SHRIEKER_SHRIEK.value(),
+            SoundEvents.NETHER_PORTAL_AMBIENT.value()
         };
         
         var sound = sounds[RANDOM.nextInt(sounds.length)];

@@ -21,6 +21,10 @@ public class SanityEventHandler {
     // Light thresholds
     private static final int DARK_THRESHOLD = 7;
     private static final int BRIGHT_THRESHOLD = 12;
+    
+    // Cached mod availability checks
+    private static Boolean thirstModLoaded = null;
+    private static Boolean coldSweatModLoaded = null;
 
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent.Post event) {
@@ -109,29 +113,41 @@ public class SanityEventHandler {
     }
 
     private float calculateThirstEffect(ServerPlayer player) {
-        // Check if ThirstWasTaken mod is loaded
-        try {
-            Class<?> thirstClass = Class.forName("dev.ghen.thirst.foundation.common.capability.IThirst");
+        // Check if ThirstWasTaken mod is loaded (cached)
+        if (thirstModLoaded == null) {
+            try {
+                Class.forName("dev.ghen.thirst.foundation.common.capability.IThirst");
+                thirstModLoaded = true;
+            } catch (ClassNotFoundException e) {
+                thirstModLoaded = false;
+            }
+        }
+        
+        if (thirstModLoaded) {
             // If the mod is present, integrate with its API
             // For now, return 0 - full integration would require the mod as a dependency
             return 0.0f;
-        } catch (ClassNotFoundException e) {
-            // Mod not present
-            return 0.0f;
         }
+        return 0.0f;
     }
 
     private float calculateTemperatureEffect(ServerPlayer player) {
-        // Check if Cold Sweat mod is loaded
-        try {
-            Class<?> tempClass = Class.forName("com.momosoftworks.coldsweat.api.temperature.Temperature");
+        // Check if Cold Sweat mod is loaded (cached)
+        if (coldSweatModLoaded == null) {
+            try {
+                Class.forName("com.momosoftworks.coldsweat.api.temperature.Temperature");
+                coldSweatModLoaded = true;
+            } catch (ClassNotFoundException e) {
+                coldSweatModLoaded = false;
+            }
+        }
+        
+        if (coldSweatModLoaded) {
             // If the mod is present, integrate with its API
             // For now, return 0 - full integration would require the mod as a dependency
             return 0.0f;
-        } catch (ClassNotFoundException e) {
-            // Mod not present
-            return 0.0f;
         }
+        return 0.0f;
     }
 
     private void applySanityEffects(ServerPlayer player, float sanity) {

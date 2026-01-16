@@ -19,6 +19,7 @@ public class SanityVisualEffects implements LayeredDraw.Layer {
     private float colorShiftAmount = 0.0f;
     private int flashTimer = 0;
     private int hallucinationTimer = 0;
+    private int tickCounter = 0; // Limit random updates to every few frames
 
     @Override
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
@@ -64,6 +65,8 @@ public class SanityVisualEffects implements LayeredDraw.Layer {
     }
 
     private void updateEffectIntensities(float sanity) {
+        tickCounter++;
+        
         // Vignette intensity increases as sanity decreases
         if (sanity < 80.0f) {
             vignetteIntensity = 1.0f - (sanity / 80.0f);
@@ -85,16 +88,23 @@ public class SanityVisualEffects implements LayeredDraw.Layer {
             colorShiftAmount = 0.0f;
         }
 
-        // Update timers
+        // Update timers only every 20 ticks (once per second) to reduce random calls
+        if (tickCounter % 20 != 0) {
+            if (flashTimer > 0) flashTimer--;
+            if (hallucinationTimer > 0) hallucinationTimer--;
+            return;
+        }
+
+        // Timer updates
         if (flashTimer > 0) {
             flashTimer--;
-        } else if (sanity < 30.0f && random.nextFloat() < 0.01f) {
+        } else if (sanity < 30.0f && random.nextFloat() < 0.2f) {
             flashTimer = 5 + random.nextInt(10);
         }
 
         if (hallucinationTimer > 0) {
             hallucinationTimer--;
-        } else if (sanity < 20.0f && random.nextFloat() < 0.005f) {
+        } else if (sanity < 20.0f && random.nextFloat() < 0.1f) {
             hallucinationTimer = 20 + random.nextInt(60);
         }
     }
@@ -181,8 +191,12 @@ public class SanityVisualEffects implements LayeredDraw.Layer {
                 };
                 
                 String text = hallucinationTexts[random.nextInt(hallucinationTexts.length)];
-                int textX = random.nextInt(Math.max(1, screenWidth - 100));
-                int textY = random.nextInt(Math.max(1, screenHeight - 20));
+                int textWidth = minecraft.font.width(text);
+                // Ensure text is at least 20 pixels from screen edges
+                int minX = 20;
+                int maxX = Math.max(minX + 1, screenWidth - textWidth - 20);
+                int textX = minX + random.nextInt(Math.max(1, maxX - minX));
+                int textY = 20 + random.nextInt(Math.max(1, screenHeight - 40));
                 int textAlpha = Math.min(255, alpha);
                 int textColor = (textAlpha << 24) | 0xFF0000;
                 

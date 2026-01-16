@@ -110,11 +110,11 @@ public class SanityHallucinationHandler {
         // Random unsettling sounds
         var sounds = new net.minecraft.sounds.SoundEvent[]{
             SoundEvents.AMBIENT_CAVE.value(),
-            SoundEvents.ENDERMAN_AMBIENT.value(),
-            SoundEvents.GHAST_AMBIENT.value(),
-            SoundEvents.WARDEN_AMBIENT.value(),
-            SoundEvents.SCULK_SHRIEKER_SHRIEK.value(),
-            SoundEvents.NETHER_PORTAL_AMBIENT.value()
+            SoundEvents.ENDERMAN_AMBIENT,
+            SoundEvents.GHAST_AMBIENT,
+            SoundEvents.WARDEN_AMBIENT,
+            SoundEvents.SCULK_SHRIEKER_SHRIEK,
+            SoundEvents.PORTAL_AMBIENT
         };
         
         var sound = sounds[RANDOM.nextInt(sounds.length)];

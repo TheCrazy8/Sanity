@@ -17,11 +17,15 @@ A Minecraft 1.21.1 mod that adds a sanity system affected by light level, hunger
 2. **Hunger**: 
    - Low hunger (≤ 6 food level): Decreases sanity faster
    
-3. **Thirst Integration** (ThirstWasTaken mod):
+3. **Sleep**:
+   - Sleeping in a bed restores 50 sanity points
+   - Only applies when completing a full sleep cycle (not interrupted)
+   
+4. **Thirst Integration** (ThirstWasTaken mod):
    - Ready for integration when ThirstWasTaken mod is present
    - Will affect sanity when thirst is low
    
-4. **Temperature Integration** (Cold Sweat mod):
+5. **Temperature Integration** (Cold Sweat mod):
    - Ready for integration when Cold Sweat mod is present
    - Extreme temperatures will affect sanity
 

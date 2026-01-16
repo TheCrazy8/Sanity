@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 public class SanityEventHandler {
@@ -17,6 +18,7 @@ public class SanityEventHandler {
     private static final float SANITY_LOSS_DARKNESS = -0.1f; // Per second in darkness
     private static final float SANITY_LOSS_LOW_HUNGER = -0.15f; // Per second when hungry
     private static final float SANITY_RECOVERY_LIGHT = 0.05f; // Per second in light
+    private static final float SANITY_RECOVERY_SLEEP = 50.0f; // Restored when sleeping successfully
     
     // Light thresholds
     private static final int DARK_THRESHOLD = 7;
@@ -80,6 +82,29 @@ public class SanityEventHandler {
             if (sanityData == null) {
                 serverPlayer.setData(SanityAttachments.SANITY_DATA, new SanityData());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerWakeUp(PlayerWakeUpEvent event) {
+        Player player = event.getEntity();
+        
+        // Only process on server side
+        if (player.level().isClientSide || !(player instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+        
+        // Only restore sanity if the player actually slept (not interrupted)
+        // wakeImmediately() being false means they completed a full sleep cycle
+        if (!event.wakeImmediately() && !event.updateLevel()) {
+            SanityData sanityData = serverPlayer.getData(SanityAttachments.SANITY_DATA);
+            if (sanityData == null) {
+                sanityData = new SanityData();
+            }
+            // Restore sanity after sleeping
+            sanityData.addSanity(SANITY_RECOVERY_SLEEP);
+            sanityData.setLastUpdate(System.currentTimeMillis());
+            serverPlayer.setData(SanityAttachments.SANITY_DATA, sanityData);
         }
     }
 
